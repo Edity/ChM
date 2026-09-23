@@ -11,8 +11,10 @@ a = a.reshape(n, n + 1)
 b = a.copy()
 a = a[:, :n]
 b = b[:, n:]
+epsilon = 3
 
 a1 = a.copy()
+b1 = b.copy()
 umatrix = np.eye(n)
 lmatrix = np.eye(n)
 pmatrix = np.eye(n)
@@ -47,13 +49,16 @@ deta = 1
 for i in range(n):
     deta *= umatrix[i, i] * lmatrix[i, i]
 
+b = np.dot(pmatrix, b)
 z = np.zeros(n)
 z[0] = b[0, 0]
+
 for i in range(1, n):
     sigma = 0
+    
     for j in range(0, i):
         sigma += lmatrix[i, j] * z[j]
-    z[i] = b[i, 0] - sigma 
+    z[i] = b[i, 0] - sigma
 
 x = np.zeros(n)
 x[n - 1] = z[n - 1] / umatrix[n - 1, n - 1]
@@ -63,17 +68,50 @@ for i in range(n - 2, -1, -1):
         sigma += umatrix[i, j] * x[j]
     x[i] = (z[i] - sigma) / umatrix[i, i]
 
+ematrix = np.eye(n)
+y = [0] * n
+for io in range(n):
+    e = ematrix[io,0:n].reshape(n, 1)
+    y1 = np.zeros(n)
+    y1[0] = e[0, 0]
+    for i in range(1, n):
+        sigma = 0
+        for j in range(0, i):
+            sigma += lmatrix[i, j] * y1[j]
+        y1[i] = e[i, 0] - sigma
+    y[io] = y1
+rx = [0] * n
+
+for io in range(n):
+    y2 = y[io]
+    x1 = np.zeros(n)
+    x1[n - 1] = y2[n - 1] / umatrix[n - 1, n - 1]
+    for i in range(n - 2, -1, -1):
+        sigma = 0
+        for j in range(i + 1, n):
+            sigma += umatrix[i, j] * x1[j]
+        x1[i] = (y2[i] - sigma) / umatrix[i, i]   
+    rx[io] = x1
+print(rx)
+areverse = np.vstack(rx).transpose()
+    
 
 
 print("L matrix:")
-print(lmatrix, '\n')
+print(np.round(lmatrix, epsilon), '\n')
 print("U matrix:")
-print(umatrix, '\n')
+print(np.round(umatrix, epsilon), '\n')
 print("LU matrix:")
-print(np.dot(lmatrix, umatrix), '\n')
+print(np.round(np.dot(lmatrix, umatrix), epsilon), '\n')
+print("X:")
+print(np.round(x.reshape(n, 1), epsilon), '\n')
+print("reverse A:")
+print(np.round(areverse, epsilon), '\n')
 print("det A:")
 print(deta, '\n')
+print("A * reverse A:")
+print(np.round(np.dot(np.dot(pmatrix, a1), areverse), epsilon), '\n')
+print("LU matrix:")
+print(np.round(np.dot(lmatrix, umatrix), epsilon), '\n')
 print("PA matrix:")
-print(np.dot(pmatrix, a1), '\n')
-print("X:")
-print(x, '\n')
+print(np.round(np.dot(pmatrix, a1), epsilon), '\n')
