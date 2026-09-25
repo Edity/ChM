@@ -1,6 +1,6 @@
 import numpy as np
 
-f = open('data.txt')
+f = open('data1.1.txt')
 n = 0
 data = []
 for line in f:
@@ -28,8 +28,8 @@ for i in range(n):
         wmatrix = np.eye(n)
         wmatrix[maxa[1], i] = wmatrix[i, maxa[1]] = 1
         wmatrix[maxa[1], maxa[1]] = wmatrix[i, i] = 0
-        pmatrix = np.dot(wmatrix, pmatrix)
-        a = np.dot(wmatrix, a)
+        pmatrix = wmatrix @ pmatrix
+        a = wmatrix @ a
         flag = False
 
     mmatrix = np.eye(n)
@@ -39,17 +39,17 @@ for i in range(n):
         mmatrix[j, i] = -m
         rmatrix[j, i] = m
     if flag:
-        lmatrix = np.dot(lmatrix, rmatrix)
+        lmatrix = lmatrix @ rmatrix
     else:
-        lmatrix = np.dot(np.dot(wmatrix, lmatrix), np.dot(wmatrix, rmatrix))
-    a = np.dot(mmatrix, a)
+        lmatrix = (wmatrix @ lmatrix) @ (wmatrix @ rmatrix)
+    a = mmatrix @ a
 umatrix = a
 
 deta = 1
 for i in range(n):
     deta *= umatrix[i, i] * lmatrix[i, i]
 
-b = np.dot(pmatrix, b)
+b = pmatrix @ b
 z = np.zeros(n)
 z[0] = b[0, 0]
 
@@ -92,7 +92,7 @@ for io in range(n):
             sigma += umatrix[i, j] * x1[j]
         x1[i] = (y2[i] - sigma) / umatrix[i, i]   
     rx[io] = x1
-print(rx)
+    
 areverse = np.vstack(rx).transpose()
     
 
@@ -102,7 +102,7 @@ print(np.round(lmatrix, epsilon), '\n')
 print("U matrix:")
 print(np.round(umatrix, epsilon), '\n')
 print("LU matrix:")
-print(np.round(np.dot(lmatrix, umatrix), epsilon), '\n')
+print(np.round(lmatrix @ umatrix, epsilon), '\n')
 print("X:")
 print(np.round(x.reshape(n, 1), epsilon), '\n')
 print("reverse A:")
@@ -110,8 +110,8 @@ print(np.round(areverse, epsilon), '\n')
 print("det A:")
 print(deta, '\n')
 print("A * reverse A:")
-print(np.round(np.dot(np.dot(pmatrix, a1), areverse), epsilon), '\n')
+print(np.round((pmatrix @ a1 @ areverse), epsilon), '\n')
 print("LU matrix:")
-print(np.round(np.dot(lmatrix, umatrix), epsilon), '\n')
+print(np.round(lmatrix @ umatrix, epsilon), '\n')
 print("PA matrix:")
-print(np.round(np.dot(pmatrix, a1), epsilon), '\n')
+print(np.round(pmatrix @ a1, epsilon), '\n')
