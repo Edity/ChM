@@ -15,10 +15,8 @@ for line in f:
     adata += temp
     n += 1
 adata[-1] = 0
-a = np.array(adata)
-b = np.array(bdata)
-a = a.reshape(n, 3)
-b = b.reshape(n, 1)
+a = np.array(adata).reshape(n, 3)
+b = np.array(bdata).reshape(n, 1)
 
 p = []
 q = []
