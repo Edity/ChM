@@ -1,6 +1,6 @@
 import numpy as np
 
-f = open('data1.2.1.txt')
+f = open('data1.2.txt')
 n = 0
 adata = [0]
 bdata = []
