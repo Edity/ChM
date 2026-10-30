@@ -20,7 +20,7 @@ def QR(a, n):
 
 
 def main():
-    f = open("data1.5.txt")
+    f = open("data1.5.1.txt")
     n = 0
     data = []
     for line in f:

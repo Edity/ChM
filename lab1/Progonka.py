@@ -22,15 +22,15 @@ p = []
 q = []
 for i in range(n):
     ai = a[i, 0]
-    bi = a[i , 1]
-    ci = a[i , 2]
-    di = b[i , 0]
+    bi = a[i, 1]
+    ci = a[i, 2]
+    di = b[i, 0]
     if i == 0:
         pi = -ci / bi
-        qi = di/ bi
+        qi = di / bi
     else:
         pi = -ci / (bi + ai * p[i - 1])
-        qi = (di - ai * q[i - 1])/ (bi + ai * p[i - 1])
+        qi = (di - ai * q[i - 1]) / (bi + ai * p[i - 1])
     p.append(pi)
     q.append(qi)
 

@@ -92,7 +92,7 @@ def main():
     a = a[:, :n]
     epsilon = 3
 
-    LUres = LUmethod(a, b,)
+    LUres = LUmethod(a, b, n)
 
     x = LUres[0]
     lmatrix = LUres[1]
